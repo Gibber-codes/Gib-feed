@@ -19,7 +19,7 @@ const decode = s => ent(ent((s || "").replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1
   .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 // first real sentence: skip links, sponsor lines and emoji-led promos
 const firstSentence = s => (s.split(/(?<=[.!?])\s|\n/).map(x => x.trim())
-  .find(x => x.length > 15 && !/https?:|sponsor|check out|patreon|sign up|subscribe/i.test(x) && !/^\p{Extended_Pictographic}/u.test(x)) || "");
+  .find(x => x.length > 25 && (x.match(/,/g) || []).length < 5 && !/\b(Dr|Mr|Ms|Prof)\.$/.test(x) && !/https?:|sponsor|check out|patreon|sign up|subscribe/i.test(x) && !/^\p{Extended_Pictographic}/u.test(x)) || "");
 const tag = (xml, name) => { const m = xml.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`)); return m ? m[1] : ""; };
 const short = (s, n) => s.length > n ? s.slice(0, s.lastIndexOf(" ", n)) + "…" : s;
 
