@@ -2,7 +2,9 @@ name: Refresh feed and publish
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # every day, 5 AM Colorado time
+    # off the top of the hour, where GitHub often drops scheduled runs
+    - cron: "23 11 * * *"  # about 4:23 AM Colorado time
+    - cron: "23 23 * * *"  # about 4:23 PM Colorado time
   workflow_dispatch: {}
   push:
     branches: [main]
