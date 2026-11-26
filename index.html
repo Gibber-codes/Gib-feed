@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>GibberFeed</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-64.png">
+<link rel="icon" type="image/svg+xml" href="icons/mark-dark.svg">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: late-night scroll, but every swipe teaches something; punchy, never preachy
+   IDEA: a stack of glowing trading cards dealt one per screen, like reels
+   PICTURE: each card's top half is generated line art in the GibberCodes red/blue offset style (or the video thumbnail)
+   COLOUR and TYPE: near-black #0B0B0F, neon red #FF1F5A, electric blue #1A8CFF, white ink; Archivo 800 titles, Inter body
+   LAYOUT: full-screen vertical snap scroller, slim top bar with topic chips, actions in a right-hand rail like reels */
+:root{color-scheme:dark;--bg:#0B0B0F;--card:#121219;--ink:#F2F2F5;--mute:#9A9AAE;--red:#FF1F5A;--blue:#1A8CFF;--line:#26263a}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:10px}
+.top{position:fixed;inset:0 0 auto;z-index:5;padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;background:linear-gradient(#0B0B0Fee 60%,#0B0B0F00)}
+.brand{display:flex;align-items:center;gap:8px;font:800 18px/1 Archivo,sans-serif;letter-spacing:.2px;margin:0 4px 10px}
+.brand img{width:28px;height:27px}
+.brand b{color:var(--ink);text-shadow:-1.5px 0 var(--red),1.5px 0 var(--blue)}
+.brand .count{margin-left:auto;font:500 13px Inter;color:var(--mute)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);color:var(--mute);font-weight:600;font-size:14px}
+.chip[aria-pressed=true]{color:var(--ink);border-color:var(--ink);box-shadow:-2px 0 0 var(--red),2px 0 0 var(--blue)}
+#feed{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none}
+#feed::-webkit-scrollbar{display:none}
+.card{height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;position:relative;display:grid;grid-template-rows:minmax(0,46%) auto 1fr;padding:calc(env(safe-area-inset-top) + 104px) 16px calc(env(safe-area-inset-bottom) + 18px)}
+.art{position:relative;border-radius:22px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.art svg,.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.play{position:absolute;inset:0;display:grid;place-items:center}
+.play span{width:64px;height:64px;border-radius:50%;background:#0B0B0Fcc;display:grid;place-items:center;box-shadow:-3px 0 0 var(--red),3px 0 0 var(--blue)}
+.len{position:absolute;right:10px;bottom:10px;background:#0B0B0Fdd;border-radius:8px;padding:2px 8px;font-size:13px;font-weight:600}
+.meta{display:flex;align-items:center;gap:8px;margin:16px 64px 6px 0;font-size:13px;color:var(--mute);font-weight:600}
+.tag{padding:2px 9px;border-radius:999px;font-size:12px;color:#0B0B0F;background:var(--ink)}
+.tag.video{background:var(--red);color:#fff}.tag.idea{background:var(--blue);color:#fff}
+.body{padding-right:60px;overflow:hidden;display:flex;flex-direction:column}
+h2{font:800 clamp(24px,7vw,34px)/1.08 Archivo,sans-serif;margin:0 0 10px;text-wrap:balance}
+.body p{margin:0 0 10px;font-size:17px;color:#D9D9E3}
+.kick{color:var(--ink);border-left:3px solid var(--red);padding-left:10px;font-weight:600;font-size:15px}
+.deep{font-size:15px;color:#D9D9E3;white-space:pre-wrap;overflow-y:auto;max-height:30dvh;border-top:1px solid var(--line);padding-top:10px}
+.go{display:inline-flex;align-items:center;gap:8px;margin-top:auto;align-self:flex-start;min-height:44px;padding:0 18px;border-radius:12px;background:var(--ink);color:#0B0B0F;font-weight:700;text-decoration:none}
+.rail{position:absolute;right:10px;bottom:calc(env(safe-area-inset-bottom) + 24px);display:flex;flex-direction:column;gap:14px}
+.rail button{width:48px;height:48px;border-radius:50%;background:#1A1A24;display:grid;place-items:center;border:1px solid var(--line)}
+.rail button[aria-pressed=true]{background:var(--red);border-color:var(--red)}
+.rail svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rail .lab{display:block;font-size:11px;color:var(--mute);text-align:center;margin-top:2px}
+.end{height:100dvh;scroll-snap-align:start;display:grid;place-content:center;gap:14px;text-align:center;padding:24px}
+.end h2{margin:0}.end p{color:var(--mute);margin:0 auto;max-width:30ch}
+.big{min-height:52px;padding:0 22px;border-radius:14px;background:var(--ink);color:#0B0B0F;font-weight:800;box-shadow:-3px 0 0 var(--red),3px 0 0 var(--blue)}
+.ghost{min-height:44px;color:var(--mute);text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 20px);transform:translate(-50%,20px);opacity:0;transition:.25s;background:#1A1A24;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-weight:600;z-index:9;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.heart{position:absolute;left:50%;top:35%;width:110px;height:110px;margin-left:-55px;pointer-events:none;animation:pop .7s ease-out forwards}
+@keyframes pop{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.1);opacity:1}100%{transform:scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.heart{animation:none;opacity:0}.toast{transition:none}}
+@media (min-width:700px){.card,.end{max-width:520px;margin:0 auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <img src="icons/mark-dark.svg" alt="" width="28" height="27">
+    <b>GibberFeed</b><span class="count" id="count"></span>
+  </div>
+  <nav class="chips" id="chips" aria-label="Topics"></nav>
+</header>
+<main id="feed" aria-live="polite"><section class="end"><h2>Loading your feed…</h2></section></main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+{
+const TOPICS=[["all","All"],["ai","AI"],["physics","Physics"],["space","Space"],["science","Science"],["build","Build"],["saved","Saved"]];
+const ICON={heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',deep:'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/>',skip:'<path d="M6 6l12 12M18 6 6 18"/>'};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl=u=>/^https:\/\//.test(u||"")?u:"";
+const store={get(k,d){try{return JSON.parse(localStorage.getItem("gf_"+k))??d}catch{return d}},set(k,v){try{localStorage.setItem("gf_"+k,JSON.stringify(v))}catch{}}};
+let saved=new Set(store.get("saved",[])),seen=store.get("seen",{}),hidden=new Set(store.get("hidden",[])),extra=store.get("extra",[]);
+let all=[],topic=store.get("topic","all"),list=[],sample=null,genBusy=false,autoGen=false;
+const feed=document.getElementById("feed"),chips=document.getElementById("chips"),countEl=document.getElementById("count"),toastEl=document.getElementById("toast");
+function toast(t){toastEl.textContent=t;toastEl.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>toastEl.classList.remove("on"),1800)}
+
+/* seeded random so each card keeps its own art */
+function rng(seed){let h=2166136261;for(const c of seed)h=Math.imul(h^c.charCodeAt(0),16777619);return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296}}
+function art(c){
+  const r=rng(c.id+c.title),W=400,H=300;let g="";
+  const dup=(d,w=3)=>`<g fill="none" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"><g stroke="#FF1F5A" transform="translate(-4 0)">${d}</g><g stroke="#1A8CFF" transform="translate(4 0)">${d}</g><g stroke="#F2F2F5">${d}</g></g>`;
+  if(c.topic==="ai"){const L=[3,5,5,3].map((n,i)=>Array.from({length:n},(_,j)=>[60+i*93,H/2+(j-(n-1)/2)*48+(r()-.5)*10]));let d="";
+    for(let i=0;i<3;i++)for(const a of L[i])for(const b of L[i+1])if(r()<.55)d+=`<path d="M${a}L${b}" stroke-opacity=".35"/>`;
+    g+=`<g stroke="#3a3a55" stroke-width="1.5">${d}</g>`;let n="";for(const l of L)for(const p of l)n+=`<circle cx="${p[0]}" cy="${p[1]}" r="${9+r()*5}"/>`;g+=dup(n)}
+  else if(c.topic==="physics"){let d="";const k=2+Math.floor(r()*3);for(let i=0;i<k;i++){const a=20+r()*40,f=.02+r()*.03,y=80+i*60+r()*20,ph=r()*6;let p=`M0 ${y}`;for(let x=10;x<=W;x+=10)p+=`L${x} ${(y+a*Math.sin(x*f+ph)).toFixed(1)}`;d+=`<path d="${p}"/>`}g+=dup(d)}
+  else if(c.topic==="space"){for(let i=0;i<70;i++)g+=`<circle cx="${r()*W}" cy="${r()*H}" r="${r()*1.6+.3}" fill="#F2F2F5" opacity="${.3+r()*.7}"/>`;const cx=120+r()*160,cy=110+r()*80,R=40+r()*30;g+=dup(`<circle cx="${cx}" cy="${cy}" r="${R}"/><ellipse cx="${cx}" cy="${cy}" rx="${R*2}" ry="${R*.45}" transform="rotate(${-20+r()*40} ${cx} ${cy})"/>`)}
+  else if(c.topic==="build"){let d="";for(let i=0;i<6;i++){const x=40+r()*320,y=40+r()*220,s=20+r()*40;d+=r()<.5?`<rect x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" rx="6"/>`:`<path d="M${x-s} ${y}h${s*2}M${x} ${y-s}v${s*2}"/>`}g+=dup(d)}
+  else{let d="";const cx=W/2,cy=H/2;for(let i=1;i<=5;i++){const n=3+Math.floor(r()*4),R=i*26,rot=r()*6;let p="";for(let j=0;j<=n;j++){const a=rot+j/n*Math.PI*2;p+=(j?"L":"M")+(cx+R*Math.cos(a)).toFixed(1)+" "+(cy+R*Math.sin(a)).toFixed(1)}d+=`<path d="${p}"/>`}g+=dup(d,2.5)}
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="${W}" height="${H}" fill="#121219"/>${g}</svg>`;
+}
+const LABEL={video:"Watch",idea:"Learn",skill:"Try this",read:"Read",follow:"Follow",gen:"Learn"};
+function cardHTML(c,i){
+  const isSaved=saved.has(c.id),url=safeUrl(c.url),thumb=c.vid?`<img alt="" loading="lazy" src="https://i.ytimg.com/vi/${esc(c.vid)}/hqdefault.jpg" onerror="this.remove()">`:"";
+  return `<section class="card" data-id="${esc(c.id)}" data-i="${i}">
+   <div class="art">${art(c)}${thumb}${c.type==="video"?`<div class="play"><span><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7Z" fill="#F2F2F5"/></svg></span></div>${c.len?`<span class="len">${esc(c.len)}</span>`:""}`:""}</div>
+   <div class="meta"><span class="tag ${esc(c.type)}">${esc(LABEL[c.type]||"Learn")}</span><span>${esc(c.source||"")}</span></div>
+   <div class="body"><h2>${esc(c.title)}</h2><p>${esc(c.body)}</p>${c.kicker?`<p class="kick">${esc(c.kicker)}</p>`:""}<div class="deep" hidden></div>
+   ${url?`<a class="go" href="${esc(url)}" target="_blank" rel="noopener">${c.type==="video"?"Watch it":c.type==="skill"?"See the skill":c.type==="follow"?"Open the site":c.type==="gen"?"Find videos":"Read it"} ↗</a>`:""}</div>
+   <div class="rail">
+    <div><button data-act="save" aria-pressed="${isSaved}" aria-label="Save"><svg viewBox="0 0 24 24">${ICON.heart}</svg></button><span class="lab">Save</span></div>
+    ${sample?`<div><button data-act="deep" aria-label="Go deeper with Claude"><svg viewBox="0 0 24 24">${ICON.deep}</svg></button><span class="lab">Deeper</span></div>`:""}
+    ${url?`<div><button data-act="copy" aria-label="Copy link"><svg viewBox="0 0 24 24">${ICON.link}</svg></button><span class="lab">Copy</span></div>`:""}
+    <div><button data-act="hide" aria-label="Not for me"><svg viewBox="0 0 24 24">${ICON.skip}</svg></button><span class="lab">Nah</span></div>
+   </div></section>`;
+}
+function endHTML(){
+  const n=list.length;
+  return `<section class="end"><h2>${topic==="saved"&&!n?"Nothing saved yet":"You reached the end"}</h2>
+   <p>${topic==="saved"?"Double-tap any card or hit the heart to keep it here.":sample?"Claude can write fresh cards on "+(topic==="all"?"AI and science":esc(TOPICS.find(t=>t[0]===topic)[1]))+" for you, as many as you want.":"Check back tomorrow for new videos and posts."}</p>
+   ${sample&&topic!=="saved"?`<button class="big" data-act="gen">Make 5 more with Claude</button>`:""}
+   <button class="ghost" data-act="reset">Start over from the top</button></section>`;
+}
+/* unseen first, interleave topics so it feels like a feed */
+function build(){
+  const pool=[...extra,...all].filter(c=>!hidden.has(c.id));
+  let l=topic==="saved"?pool.filter(c=>saved.has(c.id)):topic==="all"?pool:pool.filter(c=>c.topic===topic);
+  const day=new Date().toDateString(),r=rng(day+topic);
+  l=l.map(c=>({c,k:(seen[c.id]?1:0)+(c.fresh?-.5:0)+r()*.9})).sort((a,b)=>a.k-b.k).map(x=>x.c);
+  if(topic==="all"){const by={};for(const c of l)(by[c.type==="video"?"v":"o"]??=[]).push(c);const v=by.v||[],o=by.o||[];l=[];while(v.length||o.length){if(o.length)l.push(o.shift());if(v.length)l.push(v.shift());if(o.length)l.push(o.shift())}}
+  list=l;render();
+}
+function render(){
+  feed.innerHTML=list.map(cardHTML).join("")+endHTML();feed.scrollTop=0;observe();counter(0);
+}
+function counter(i){const left=list.filter(c=>!seen[c.id]).length;countEl.textContent=list.length?`${Math.min(i+1,list.length)} / ${list.length} · ${left} new`:""}
+let io;
+function observe(){
+  io?.disconnect();
+  io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){const id=e.target.dataset.id,i=+e.target.dataset.i;
+    if(id&&!seen[id]){seen[id]=Date.now();store.set("seen",seen)}counter(i);
+    if(autoGen&&sample&&!genBusy&&topic!=="saved"&&i>=list.length-2)generate()}},{root:feed,threshold:.6});
+  feed.querySelectorAll(".card").forEach(s=>io.observe(s));
+}
+function drawChips(){chips.innerHTML=TOPICS.map(([k,v])=>`<button class="chip" data-t="${k}" aria-pressed="${k===topic}">${v}</button>`).join("")}
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;topic=b.dataset.t;store.set("topic",topic);drawChips();build()});
+const byId=id=>[...extra,...all].find(c=>c.id===id);
+function toggleSave(sec,force){const id=sec.dataset.id,b=sec.querySelector('[data-act=save]');const on=force??!saved.has(id);on?saved.add(id):saved.delete(id);store.set("saved",[...saved]);b?.setAttribute("aria-pressed",on);return on}
+feed.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const sec=b.closest(".card"),act=b.dataset.act;
+  if(act==="save")toast(toggleSave(sec)?"Saved":"Removed from saved");
+  else if(act==="copy"){const c=byId(sec.dataset.id);try{await navigator.clipboard.writeText(c.url);toast("Link copied")}catch{toast("Couldn't copy here")}}
+  else if(act==="hide"){hidden.add(sec.dataset.id);store.set("hidden",[...hidden]);toast("Got it, hiding that one");const nx=sec.nextElementSibling;nx?.scrollIntoView({behavior:"smooth"});setTimeout(()=>{list=list.filter(c=>c.id!==sec.dataset.id);const y=feed.scrollTop;sec.remove();feed.querySelectorAll(".card").forEach((s,i)=>s.dataset.i=i)},450)}
+  else if(act==="deep")deeper(sec,b);
+  else if(act==="gen"){autoGen=true;generate()}
+  else if(act==="reset"){seen={};store.set("seen",seen);build()}
+});
+let lastTap=0;
+feed.addEventListener("pointerup",e=>{if(e.target.closest("button,a"))return;const sec=e.target.closest(".card");if(!sec)return;const t=Date.now();
+  if(t-lastTap<300){toggleSave(sec,true);const h=document.createElement("div");h.innerHTML='<svg viewBox="0 0 24 24" class="heart"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" fill="#FF1F5A"/></svg>';const s=h.firstChild;sec.appendChild(s);setTimeout(()=>s.remove(),800);lastTap=0}else lastTap=t});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowDown"||e.key==="j"){feed.scrollBy({top:innerHeight,behavior:"smooth"});e.preventDefault()}if(e.key==="ArrowUp"||e.key==="k"){feed.scrollBy({top:-innerHeight,behavior:"smooth"});e.preventDefault()}});
+
+/* Claude features: only where the page can ask Claude (inside the Claude app) */
+async function deeper(sec,b){
+  const c=byId(sec.dataset.id),box=sec.querySelector(".deep");if(!box.hidden&&box.textContent){box.hidden=true;return}
+  box.hidden=false;box.textContent="Thinking…";b.disabled=true;
+  try{await sample(`You write for a curious self-taught developer and mechanic who is learning about AI and science on their phone. Explain this card more deeply in 4 to 6 short plain sentences. Use one everyday or garage analogy. No headings, no lists, no links.\n\nCard title: ${c.title}\nCard text: ${c.body}`,{modelTier:"quick",onText:({text})=>{box.textContent=text}})}
+  catch(err){box.textContent=err?.code==="rate_limited"?"Claude is busy. Try again in a minute.":"Couldn't reach Claude right now."}
+  b.disabled=false;
+}
+async function generate(){
+  if(genBusy||!sample)return;genBusy=true;const endB=feed.querySelector("[data-act=gen]");if(endB){endB.disabled=true;endB.textContent="Writing cards…"}
+  const want=topic==="all"?"a mix of AI (how models and agents work, new ideas), physics, space and surprising science":({ai:"AI: how models, agents and tools work",physics:"physics",space:"space and astronomy",science:"surprising science and math",build:"building software with AI agents, dev tools and tips"})[topic];
+  const have=[...extra,...all].slice(0,200).map(c=>c.title).join("; ");
+  try{
+    const out=await sample.json(`Write 5 new learning cards for a swipeable phone feed about ${want}. The reader is a self-taught developer and mechanic who loves learning cool things. Each card teaches one true, surprising idea. Avoid these titles already in the feed: ${have}.\nReturn only JSON: an array of 5 objects with keys "topic" (one of ai, physics, space, science, build), "title" (max 7 words), "body" (2 or 3 short plain sentences, under 50 words), "kicker" (one punchy sentence on why it matters or a real-world tie-in), "search" (a 3 to 6 word YouTube search to learn more).`,{modelTier:"default"});
+    const arr=(Array.isArray(out)?out:out?.cards||[]).filter(x=>x&&x.title&&x.body).slice(0,5);
+    const now=Date.now();
+    const fresh=arr.map((x,j)=>({id:"g"+now+"_"+j,type:"gen",fresh:true,topic:["ai","physics","space","science","build"].includes(x.topic)?x.topic:"ai",title:String(x.title).slice(0,90),body:String(x.body).slice(0,400),kicker:x.kicker?String(x.kicker).slice(0,200):"",source:"Written by Claude",url:x.search?"https://www.youtube.com/results?search_query="+encodeURIComponent(String(x.search).slice(0,80)):""}));
+    extra=[...fresh,...extra].slice(0,300);store.set("extra",extra);
+    const start=list.length;list.push(...fresh);
+    feed.querySelector(".end")?.remove();
+    feed.insertAdjacentHTML("beforeend",fresh.map((c,j)=>cardHTML(c,start+j)).join("")+endHTML());observe();
+    toast(fresh.length+" new cards");
+  }catch(err){toast(err?.code==="rate_limited"?"Claude is busy, try again soon":err?.code==="not_granted"?"Claude cards are off":"Couldn't make cards right now");autoGen=false;if(endB){endB.disabled=false;endB.textContent="Make 5 more with Claude"}}
+  genBusy=false;
+}
+
+drawChips();
+fetch("feed.json",{cache:"no-cache"}).then(r=>r.json()).then(d=>{all=d.cards||[];build()}).catch(()=>{feed.innerHTML='<section class="end"><h2>Couldn\'t load the feed</h2><p>Check your connection and reopen.</p></section>'});
+if(window.claude?.use)window.claude.use("sample").then(s=>{if(s){sample=s;if(all.length){const y=feed.scrollTop;render();feed.scrollTop=y}}}).catch(()=>{});
+if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.(ai|site)|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
