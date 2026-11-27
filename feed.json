@@ -90,6 +90,44 @@
  "cards": [
   {
    "type": "video",
+   "topic": "ai",
+   "title": "Full video now on YouTube!",
+   "body": "New from Welch Labs",
+   "source": "Welch Labs",
+   "url": "https://www.youtube.com/watch?v=nxDyEro0pFQ",
+   "vid": "nxDyEro0pFQ",
+   "date": "2026-11-27T19:49:15+00:00",
+   "fetched": true,
+   "id": "f1795809717181_0",
+   "fresh": true
+  },
+  {
+   "type": "video",
+   "topic": "ai",
+   "title": "DeepMind’s New AI Just Changed The AI Race",
+   "body": "New from Two Minute Papers",
+   "source": "Two Minute Papers",
+   "url": "https://www.youtube.com/watch?v=u6UYsl-KEoc",
+   "vid": "u6UYsl-KEoc",
+   "date": "2026-11-27T08:42:30+00:00",
+   "fetched": true,
+   "id": "f1795809717181_1",
+   "fresh": true
+  },
+  {
+   "type": "read",
+   "topic": "ai",
+   "title": "Taking Trainium3 to the Track: Generating Videos with LTX-2.5",
+   "body": "New post from Hugging Face",
+   "source": "Hugging Face",
+   "url": "https://huggingface.co/blog/video-trainium3",
+   "date": "Fri, 27 Nov 2026 00:00:00 GMT",
+   "fetched": true,
+   "id": "f1795809717181_2",
+   "fresh": true
+  },
+  {
+   "type": "video",
    "topic": "science",
    "title": "Can a roll of tape really make X-rays?",
    "body": "#Veritasium #XRays #StickyTape #Physics",
@@ -98,8 +136,7 @@
    "vid": "t81DrYDi3As",
    "date": "2026-11-26T15:20:14+00:00",
    "fetched": true,
-   "id": "f1795756199211_0",
-   "fresh": true
+   "id": "f1795756199211_0"
   },
   {
    "type": "video",
@@ -111,8 +148,7 @@
    "vid": "3X0UcSRQOY4",
    "date": "2026-11-26T15:00:16+00:00",
    "fetched": true,
-   "id": "f1795756199211_1",
-   "fresh": true
+   "id": "f1795756199211_1"
   },
   {
    "type": "read",
@@ -123,8 +159,7 @@
    "url": "https://simonwillison.net/2026/Nov/26/jack-despain-zhou/",
    "date": "2026-11-26T15:09:31+00:00",
    "fetched": true,
-   "id": "f1795756199211_2",
-   "fresh": true
+   "id": "f1795756199211_2"
   },
   {
    "type": "read",
@@ -135,8 +170,7 @@
    "url": "https://simonwillison.net/2026/Nov/26/hn-50651685/",
    "date": "2026-11-26T05:08:46+00:00",
    "fetched": true,
-   "id": "f1795756199211_3",
-   "fresh": true
+   "id": "f1795756199211_3"
   },
   {
    "type": "read",
