@@ -1,6 +1,6 @@
 {
  "name": "GibberFeed",
- "updated": "2026-11-26",
+ "updated": "2026-11-27",
  "sources": {
   "youtube": [
    {
@@ -89,6 +89,56 @@
  },
  "cards": [
   {
+   "type": "video",
+   "topic": "science",
+   "title": "Can a roll of tape really make X-rays?",
+   "body": "#Veritasium #XRays #StickyTape #Physics",
+   "source": "Veritasium",
+   "url": "https://www.youtube.com/watch?v=t81DrYDi3As",
+   "vid": "t81DrYDi3As",
+   "date": "2026-11-26T15:20:14+00:00",
+   "fetched": true,
+   "id": "f1795756199211_0",
+   "fresh": true
+  },
+  {
+   "type": "video",
+   "topic": "science",
+   "title": "Something in Your Kitchen Could Save Millions of Lives!",
+   "body": "Your home is full of various food items, but some of them are genuine heroes, saving thousands of lives.",
+   "source": "Kurzgesagt",
+   "url": "https://www.youtube.com/watch?v=3X0UcSRQOY4",
+   "vid": "3X0UcSRQOY4",
+   "date": "2026-11-26T15:00:16+00:00",
+   "fetched": true,
+   "id": "f1795756199211_1",
+   "fresh": true
+  },
+  {
+   "type": "read",
+   "topic": "ai",
+   "title": "Quoting Jack Despain Zhou",
+   "body": "Among the many already existing effects of AI has been a great de-individualization.",
+   "source": "Simon Willison",
+   "url": "https://simonwillison.net/2026/Nov/26/jack-despain-zhou/",
+   "date": "2026-11-26T15:09:31+00:00",
+   "fetched": true,
+   "id": "f1795756199211_2",
+   "fresh": true
+  },
+  {
+   "type": "read",
+   "topic": "ai",
+   "title": "The New York Times warns photographers not to update Photoshop over AI features",
+   "body": "My comment on The New York Times warns photographers not to update Photoshop over AI features — Hacker News.",
+   "source": "Simon Willison",
+   "url": "https://simonwillison.net/2026/Nov/26/hn-50651685/",
+   "date": "2026-11-26T05:08:46+00:00",
+   "fetched": true,
+   "id": "f1795756199211_3",
+   "fresh": true
+  },
+  {
    "type": "read",
    "topic": "ai",
    "title": "sqlite3_rsync: Database Remote-Copy Tool For SQLite",
@@ -97,8 +147,7 @@
    "url": "https://simonwillison.net/2026/Nov/26/sqlite3-rsync/",
    "date": "2026-11-26T06:08:25+00:00",
    "fetched": true,
-   "id": "f1795705426370_0",
-   "fresh": true
+   "id": "f1795705426370_0"
   },
   {
    "type": "read",
@@ -109,8 +158,7 @@
    "url": "https://simonwillison.net/2026/Nov/25/datasette-charts/",
    "date": "2026-11-25T18:16:50+00:00",
    "fetched": true,
-   "id": "f1795705426370_1",
-   "fresh": true
+   "id": "f1795705426370_1"
   },
   {
    "type": "read",
@@ -121,8 +169,7 @@
    "url": "https://simonwillison.net/2026/Nov/24/datasette-charts-2/",
    "date": "2026-11-24T06:07:19+00:00",
    "fetched": true,
-   "id": "f1795705426370_2",
-   "fresh": true
+   "id": "f1795705426370_2"
   },
   {
    "type": "read",
@@ -133,8 +180,7 @@
    "url": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench",
    "date": "Thu, 26 Nov 2026 11:37:17 GMT",
    "fetched": true,
-   "id": "f1795705426370_3",
-   "fresh": true
+   "id": "f1795705426370_3"
   },
   {
    "type": "read",
@@ -145,8 +191,7 @@
    "url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
    "date": "Thu, 26 Nov 2026 05:05:36 GMT",
    "fetched": true,
-   "id": "f1795705426370_4",
-   "fresh": true
+   "id": "f1795705426370_4"
   },
   {
    "type": "read",
@@ -157,8 +202,7 @@
    "url": "https://huggingface.co/blog/training-swarms",
    "date": "Thu, 26 Nov 2026 00:00:00 GMT",
    "fetched": true,
-   "id": "f1795705426370_5",
-   "fresh": true
+   "id": "f1795705426370_5"
   },
   {
    "type": "video",
