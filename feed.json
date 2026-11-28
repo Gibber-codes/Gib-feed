@@ -1,6 +1,6 @@
 {
  "name": "GibberFeed",
- "updated": "2026-11-27",
+ "updated": "2026-11-28",
  "sources": {
   "youtube": [
    {
@@ -90,6 +90,43 @@
  "cards": [
   {
    "type": "video",
+   "topic": "physics",
+   "title": "The Speed of Light Was NEVER Really About Light. Its About...",
+   "body": "We call it the speed of light, but light has nothing to do with it.",
+   "source": "Sleep On Physics",
+   "url": "https://www.youtube.com/watch?v=6ujQNgMAUSY",
+   "vid": "6ujQNgMAUSY",
+   "date": "2026-11-27T22:00:03+00:00",
+   "fetched": true,
+   "id": "f1795841240629_0",
+   "fresh": true
+  },
+  {
+   "type": "read",
+   "topic": "ai",
+   "title": "datasette-charts 0.4a0",
+   "body": "Release: datasette-charts 0.4a0 The new datasette-charts plugin has its own plugin hook to allow other plugins to define new chart types, but I hadn't actually used it for anything yet.",
+   "source": "Simon Willison",
+   "url": "https://simonwillison.net/2026/Nov/27/datasette-charts/",
+   "date": "2026-11-27T23:57:17+00:00",
+   "fetched": true,
+   "id": "f1795841240629_1",
+   "fresh": true
+  },
+  {
+   "type": "read",
+   "topic": "ai",
+   "title": "datasette-mcp 0.4",
+   "body": "Release: datasette-mcp 0.4 Fixed for compatibility with Datasette 1.0a44 .",
+   "source": "Simon Willison",
+   "url": "https://simonwillison.net/2026/Nov/27/datasette-mcp/",
+   "date": "2026-11-27T00:26:17+00:00",
+   "fetched": true,
+   "id": "f1795841240629_2",
+   "fresh": true
+  },
+  {
+   "type": "video",
    "topic": "ai",
    "title": "Full video now on YouTube!",
    "body": "New from Welch Labs",
@@ -98,8 +135,7 @@
    "vid": "nxDyEro0pFQ",
    "date": "2026-11-27T19:49:15+00:00",
    "fetched": true,
-   "id": "f1795809717181_0",
-   "fresh": true
+   "id": "f1795809717181_0"
   },
   {
    "type": "video",
@@ -111,8 +147,7 @@
    "vid": "u6UYsl-KEoc",
    "date": "2026-11-27T08:42:30+00:00",
    "fetched": true,
-   "id": "f1795809717181_1",
-   "fresh": true
+   "id": "f1795809717181_1"
   },
   {
    "type": "read",
@@ -123,8 +158,7 @@
    "url": "https://huggingface.co/blog/video-trainium3",
    "date": "Fri, 27 Nov 2026 00:00:00 GMT",
    "fetched": true,
-   "id": "f1795809717181_2",
-   "fresh": true
+   "id": "f1795809717181_2"
   },
   {
    "type": "video",
